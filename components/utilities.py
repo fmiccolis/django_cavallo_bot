@@ -12,11 +12,11 @@ import requests
 import validators
 from PIL import UnidentifiedImageError
 from bs4 import BeautifulSoup
+from django.core.files.base import ContentFile
 from telegram import Update, Message
 from telegram.ext import ConversationHandler, CallbackContext
 
-from botConfig import EVENT_ENCODINGS_PATH, create_dir, EVENT_PHOTOS_PATH, delete_dir_and_content, \
-    get_time_left, INSTAGRAM_BASE_URL
+from botConfig import EVENT_ENCODINGS_PATH, EVENT_PHOTOS_PATH, get_time_left, INSTAGRAM_BASE_URL
 from core.models import Photo, Event
 
 
@@ -70,27 +70,19 @@ def start_scanning(update: Update, context: CallbackContext):
     msg = message_object.reply_text("Perfetto inizio a scannerizzare il sito!")
     evento: Event = context.user_data["evento"]
     Photo.objects.filter(event=evento).delete()
-    delete_dir_and_content([
-        EVENT_ENCODINGS_PATH.format(str(evento.id)),
-        EVENT_PHOTOS_PATH.format(str(evento.id))
-    ])
-    create_dir([
-        EVENT_ENCODINGS_PATH.format(str(evento.evento_id)),
-        EVENT_PHOTOS_PATH.format(str(evento.evento_id)),
-    ])
     url = evento.url
     internal = False
     if validators.url(url):
         real_img_list = extract_from_external_url(url, msg)
     else:
         internal = True
-        real_img_list = extract_from_internal_url(url, evento.evento_id)
+        real_img_list = extract_from_internal_url(url, evento.id)
 
     progress_msg = message_object.reply_text(f"Sto analizzando la foto 0 / {len(real_img_list)}.\n0.00 %")
     real_saved = 0
     start_time = datetime.now()
     total = len(real_img_list)
-    temp_photo = f'temp{evento.evento_id}.jpg'
+    temp_photo = f'temp{evento.id}.jpg'
     for idx, photo in enumerate(real_img_list):
         time_left = get_time_left(start_time, idx + 1, total)
         percentage = round((idx + 1) / len(real_img_list) * 100, 2)
@@ -122,13 +114,7 @@ def start_scanning(update: Update, context: CallbackContext):
                             'url': db_photo.url
                         }
                         this_photo_data.append(this_face_data)
-                    dat_url = os.path.join(EVENT_ENCODINGS_PATH.format(str(evento.evento_id)),
-                                           f'{db_photo.id}encodings.dat')
-
-                    with open(dat_url, 'wb') as f:
-                        pickle.dump(this_photo_data, f)
-
-                    db_photo.faces = dat_url
+                    db_photo.faces.save(f'{db_photo.id}encodings.dat', ContentFile(pickle.dumps(this_photo_data)))
                     db_photo.save()
                     real_saved += 1
                     print("salvata la foto e i dati di {0}".format(db_photo.url))
