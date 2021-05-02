@@ -1,0 +1,7 @@
+db.sqlite3
+venv
+logs
+media
+resources
+.idea
+**/__pycache__
