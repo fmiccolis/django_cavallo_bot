@@ -241,9 +241,10 @@ def extract_event_info(evento: Event, all_info=True):
             strbuilder += f'{emoji.emojize(":memo:", use_aliases=True)}\t{evento.description}\n'
         strbuilder += f'{emoji.emojize(":globe_with_meridians:", use_aliases=True)}\t[vai al sito]({url})\n' \
                       f'{emoji.emojize(":symbols:", use_aliases=True)}\t{category_name} {emoji.emojize(category.emoji, use_aliases=True)}\n' \
-                      f'{emoji.emojize(":date:", use_aliases=True)}\t{real_date}\n' \
-                      f'{emoji.emojize(":eye:", use_aliases=True)}\t{emoji.emojize(visibility, use_aliases=True)}\n' \
-                      f'{emoji.emojize(":framed_picture:", use_aliases=True)}\t{len(photos)} \({len(photos) - len(no_faces_photos)} con volti\)\n'
+                      f'{emoji.emojize(":date:", use_aliases=True)}\t{real_date}\n'
+        if all_info:
+            strbuilder += f'{emoji.emojize(":eye:", use_aliases=True)}\t{emoji.emojize(visibility, use_aliases=True)}\n'
+        strbuilder += f'{emoji.emojize(":framed_picture:", use_aliases=True)}\t{len(photos)} \({len(photos) - len(no_faces_photos)} con volti\)\n'
         if all_info:
             strbuilder += f'{emoji.emojize(":vertical_traffic_light:", use_aliases=True)}\t{emoji.emojize(status, use_aliases=True)}'
     return strbuilder

@@ -39,7 +39,7 @@ def deepsearch(update: Update, context: CallbackContext):
     message = update.message
     nome = message.text
     if nome == "/salta":
-        fotografi = Photographer.objects.filter(events__status=True).distinct()
+        fotografi = Photographer.objects.filter(events__status=True, events__is_public=True).distinct()
         deftext = "Mi dispiace ma non ci sono fotografi che hanno degli eventi attivi!"
     else:
         fotografi = Photographer.objects.filter(name=nome, events__status=True)
@@ -48,7 +48,7 @@ def deepsearch(update: Update, context: CallbackContext):
         message.reply_text(f"Ecco qui!\nHo trovato {len(fotografi)} fotografo/i", reply_markup=ReplyKeyboardRemove())
         init_navigation(message, context, list(fotografi), 'photographers', 'viewer')
         context.user_data['search_choiche'] = 'fotografo'
-        context.user_data['fotografo_id'] = fotografi[0]
+        context.user_data['fotografo'] = fotografi[0]
     else:
         message.reply_text(deftext, reply_markup=ReplyKeyboardRemove())
     return ConversationHandler.END
@@ -57,7 +57,7 @@ def deepsearch(update: Update, context: CallbackContext):
 def search_by_cate(update: Update, context: CallbackContext):
     eve_logger.info(extra=extra, msg=f"Request search_by_cate")
     message = update.message
-    categorie = Category.objects.filter(events__status=True)
+    categorie = Category.objects.filter(events__status=True, events__is_public=True).distinct()
     if categorie:
         message.reply_text(f"Ecco qui!\nHo trovato {len(categorie)} categoria/e", reply_markup=ReplyKeyboardRemove())
         init_navigation(message, context, list(categorie), 'categories', 'viewer')

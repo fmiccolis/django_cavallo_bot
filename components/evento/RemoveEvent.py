@@ -25,7 +25,6 @@ def remove_event_callback_handler(update: Update, context: CallbackContext):
     ]
     message.reply_text(f"Sei sicuro di voler rimuovere l\'evento {evento.name}?",
                        reply_markup=ReplyKeyboardMarkup(resize_keyboard=True, keyboard=reply_keyboard, one_time_keyboard=True))
-    context.user_data['remove_event'] = evento
     return ARE_YOU_SURE
 
 
@@ -33,7 +32,7 @@ def remove_event(update: Update, context: CallbackContext):
     eve_logger.info(extra=extra, msg=f"Request remove_event")
     message = update.message
     try:
-        evento: Event = context.user_data['remove_event']
+        evento: Event = context.user_data['evento']
         evento.delete()
         message.reply_text("Ok l\'evento è stato rimosso", reply_markup=ReplyKeyboardRemove())
         update_and_show(message, context, evento, True)

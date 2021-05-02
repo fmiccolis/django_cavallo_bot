@@ -19,13 +19,11 @@ def edit_grapher_callback_handler(update: Update, context: CallbackContext):
     query.answer()
     message = query.message
     msgid = message.message_id
-    photographer: Photographer = context.user_data['fotografo']
     editable_keyboard = [[column] for column in editable]
     message.reply_text(
         "Ok scegli quale informazione modificare per il account da fotografo",
         reply_markup=ReplyKeyboardMarkup(resize_keyboard=True, keyboard=editable_keyboard, one_time_keyboard=True)
     )
-    context.user_data['edit_grapher'] = photographer
     context.user_data['msg_to_delete'] = msgid
     return WHATTOEDIT
 
@@ -46,8 +44,7 @@ def edit_name_switch(update: Update, context: CallbackContext):
 
 
 def edit_name(update: Update, context: CallbackContext):
-    photographer: Photographer = context.user_data['edit_grapher']
-    return param_switcher(update, context, photographer, 'nome', update.message.text, 'il nome')
+    return param_switcher(update, context, 'nome', update.message.text, 'il nome')
 
 
 def edit_url_switch(update: Update, context: CallbackContext):
@@ -60,11 +57,10 @@ def edit_url_switch(update: Update, context: CallbackContext):
 
 
 def edit_url(update: Update, context: CallbackContext):
-    photographer: Photographer = context.user_data['edit_grapher']
     url = update.message.text
     if url == '/salta':
         url = ""
-    return param_switcher(update, context, photographer, 'url', url, 'il link al tuo sito web')
+    return param_switcher(update, context, 'url', url, 'il link al tuo sito web')
 
 
 def edit_ig_switch(update: Update, context: CallbackContext):
@@ -76,20 +72,18 @@ def edit_ig_switch(update: Update, context: CallbackContext):
 
 
 def edit_ig(update: Update, context: CallbackContext):
-    photographer: Photographer = context.user_data['edit_grapher']
     insta = update.message.text
     if insta == '/salta':
-        return param_switcher(update, context, photographer, 'ig', "", 'il profilo instagram')
+        return param_switcher(update, context, 'ig', "", 'il profilo instagram')
     elif validate_ig_username(insta[1:]):
-        return param_switcher(update, context, photographer, 'ig', insta[1:], 'il profilo instagram')
+        return param_switcher(update, context, 'ig', insta[1:], 'il profilo instagram')
     else:
         update.message.reply_text("Sembra che non ci sia nessun profilo associato a questo username!\n"
                                   "Ricontrolla e rimandamelo oppure usa il comando /salta")
         return EDITIG
 
 
-def param_switcher(update: Update, context: CallbackContext, fotografo: Photographer, choiche: str, new_value: str,
-                   to_write: str):
+def param_switcher(update: Update, context: CallbackContext, choiche: str, new_value: str, to_write: str):
     gra_logger.info(extra=extra, msg=f"Request param_switcher. choiche: {choiche}, new_value: {new_value}")
     switcher = {
         'nome': 'name',
@@ -98,6 +92,7 @@ def param_switcher(update: Update, context: CallbackContext, fotografo: Photogra
     }
 
     try:
+        fotografo: Photographer = context.user_data['fotografo']
         setattr(fotografo, switcher[choiche], new_value)
         fotografo.save()
         update_and_show(update.message, context, fotografo, 'photographers', 'owner')

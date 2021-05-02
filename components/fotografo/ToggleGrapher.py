@@ -15,7 +15,7 @@ def toggle_grapher_callback_handler(update: Update, context: CallbackContext):
     message = query.message
     photographer: Photographer = context.user_data['fotografo']
     photographer.status = not photographer.status
-    photographer.save()
+    photographer.save(update_fields=['status'])
     message.delete()
     update_and_show(message, context, photographer, 'photographers', 'devs')
 

@@ -14,7 +14,7 @@ def first_element_callback_hand(update: Update, context: CallbackContext):
 def prev_element_callback_hand(update: Update, context: CallbackContext):
     in_action = context.chat_data["in_action"]
     current = context.chat_data[in_action].get("current", None)
-    return represent_data(update, context, current, current-1, in_action)
+    return represent_data(update, context, current, current - 1, in_action)
 
 
 def this_element_callback_hand(update: Update, context: CallbackContext):
@@ -23,13 +23,13 @@ def this_element_callback_hand(update: Update, context: CallbackContext):
     info = context.chat_data[in_action]
     total = info.get("total", None)
     current = info.get("current", None)
-    query.answer(text=f"Elemento {current+1} su {total}")
+    query.answer(text=f"Elemento {current + 1} su {total}")
 
 
 def next_element_callback_hand(update: Update, context: CallbackContext):
     in_action = context.chat_data["in_action"]
     current = context.chat_data[in_action].get("current", None)
-    return represent_data(update, context, current, current+1, in_action)
+    return represent_data(update, context, current, current + 1, in_action)
 
 
 def last_element_callback_hand(update: Update, context: CallbackContext):
@@ -51,7 +51,7 @@ def represent_data(update: Update, context: CallbackContext, from_pos: int, to_p
         return
     if to_pos < 0:
         return
-    if to_pos > total-1:
+    if to_pos > total - 1:
         return
     message = update.effective_message
     level = context.chat_data['level']
@@ -79,7 +79,7 @@ def represent_data(update: Update, context: CallbackContext, from_pos: int, to_p
         message.reply_text("Errore durante il cambio!")
 
 
-def init_navigation(message: Message, context: CallbackContext, array, choice: str, level: str):
+def init_navigation(message: Message, context: CallbackContext, array, choice: str, level: str, all_info=True):
     context.chat_data['in_action'] = choice
     context.chat_data['level'] = level
     info = {
@@ -88,7 +88,7 @@ def init_navigation(message: Message, context: CallbackContext, array, choice: s
         'total': len(array)
     }
     context.chat_data[choice] = info
-    strbuilder = extraction_switcher(array[0], choice)
+    strbuilder = extraction_switcher(array[0], choice, all_info)
     keyboard = generate_navigation_action(keyboard_navigation, navigation[choice][level], 0, len(array))
     if len(array) == 1:
         keyboard = navigation[choice][level]
