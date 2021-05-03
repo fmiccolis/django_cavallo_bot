@@ -24,20 +24,20 @@ def find_face(update: Update, context: CallbackContext):
     pm_logger.info(extra=extra, msg=f"Request find_face")
     query = update.callback_query
     query.answer()
-    message = query.message
-    user_id = message.from_user.id
+    user_id = query.from_user.id
     evento: Event = context.user_data['evento']
-    tg_user: TelegramUser = TelegramUser.objects.get(pk=user_id)
-    photos = Photo.objects.filter(photomatch__telegram_user=tg_user, event=evento)
-    if photos[0]:
-        pm_logger.info(extra=extra, msg=f"Request find_face. match founded for event {evento.id}, total: {photos[1]}")
+    tg_user: TelegramUser = TelegramUser.objects.get(id=user_id)
+    context.user_data['tg_user'] = tg_user
+    photos = Photo.objects.filter(matches__telegram_user=tg_user, matches__status=True, event=evento)
+    if len(photos) > 0:
+        pm_logger.info(extra=extra, msg=f"Request find_face. match founded for event {evento.id}, total: {len(photos)}")
         keyboard_send_search = [['mandami le foto'], ['ricomanica la ricerca']]
         query.message.reply_text(
             "Per questo evento hai già cercato e trovato il tuo volto!\n"
             "Ti invio le foto oppure ricomincio la ricerca?",
             reply_markup=ReplyKeyboardMarkup(resize_keyboard=True, keyboard=keyboard_send_search, one_time_keyboard=True)
         )
-        context.user_data['photos_to_send'] = photos[2]
+        context.user_data['photos_to_send'] = photos
         context.user_data['search_evento'] = evento
         return SENDSEARCH
     else:
@@ -47,7 +47,6 @@ def find_face(update: Update, context: CallbackContext):
             "Faccio partire la ricerca!"
         )
         context.user_data['search_evento'] = evento
-        context.user_data['tg_user'] = tg_user
         return do_search(update, context)
 
 
@@ -101,8 +100,8 @@ def do_search(update: Update, context: CallbackContext):
 
     evento = context.user_data['search_evento']
     try:
-        PhotoMatch.objects.filter(event=evento, telegram_user=telegram_user).delete()
-        photos = Photo.objects.filter(event=evento)
+        PhotoMatch.objects.filter(photo__event=evento, telegram_user=telegram_user).delete()
+        photos = Photo.objects.filter(event=evento, status=True).exclude(faces='')
         if photos:
             pm_logger.info(extra=extra, msg=f"Request do_search. total photos: {len(photos)}")
             message.reply_text(
@@ -135,6 +134,7 @@ def do_search(update: Update, context: CallbackContext):
             runtime_dataset = dict()
             runtime_valid_encodings = list()
             for idx, photo in enumerate(photos):
+                pm_logger.info(extra=extra, msg=f"analisi foto: {idx}")
                 time.sleep(0.2 if isdev else 0.3)
                 time_left = get_time_left(start_time, idx+1, total)
                 percent = round((idx + 1) * 100 / total, 2)
@@ -143,8 +143,10 @@ def do_search(update: Update, context: CallbackContext):
                          f"Tempo rimanente (stimato): {time_left}"
                 )
                 try:
-                    with open(photo.faces, 'rb') as p_enc:
+                    with open(photo.faces.path, 'rb') as p_enc:
                         unknown_encodings = pickle.load(p_enc)
+
+                    pm_logger.info(extra=extra, msg=f"aperto encoding")
 
                     for single_encoding in unknown_encodings:
                         result = face_recognition.compare_faces(known_encodings+runtime_valid_encodings, single_encoding['encoding'])

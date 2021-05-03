@@ -18,7 +18,7 @@ def restart_scan(update: Update, context: CallbackContext):
     message = query.message
     evento: Event = context.user_data['evento']
     matches = PhotoMatch.objects.filter(photo__event=evento)
-    if matches:
+    if len(matches) > 0:
         keyboard_yes_no = [['Si'], ['No']]
         message.reply_text(
             "Degli utenti hanno già trovato i loro volti per questo evento!\n"
