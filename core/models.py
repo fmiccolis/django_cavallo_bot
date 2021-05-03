@@ -10,6 +10,7 @@ from django.core.files.storage import FileSystemStorage
 
 # Create your models here.
 from django.utils.text import slugify
+from emoji_picker.widgets import EmojiPickerTextInputAdmin
 
 
 def user_files(instance, filename):
@@ -110,7 +111,7 @@ class Category(models.Model):
         verbose_name_plural = 'categories'
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.name} {self.emoji}"
 
     @classmethod
     def my_name(cls_):

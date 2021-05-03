@@ -36,8 +36,12 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
 
     'admin_honeypot',
-    'rest_framework'
+    'rest_framework',
+
+    'emoji_picker',
 ]
+
+INSTAGRAM_BASE_URL = 'https://www.instagram.com/{0}'
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
