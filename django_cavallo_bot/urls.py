@@ -8,4 +8,5 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
     path('', include('frontend.urls')),
+    path('api/', include('core.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
