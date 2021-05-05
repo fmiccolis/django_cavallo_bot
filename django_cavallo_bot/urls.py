@@ -7,4 +7,5 @@ urlpatterns = [
     path('cavallo/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
+    path('', include('frontend.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
