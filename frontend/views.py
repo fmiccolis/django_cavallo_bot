@@ -2,10 +2,10 @@ from django.shortcuts import render
 from django.conf import settings
 
 
-def index(request):
+def index(request, *args, **kwargs):
     context = {
         'settings': settings,
     }
-    return render(request, 'index.html', context)
+    return render(request, 'frontend/index.html', context)
 
 # Create your views here.
