@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import  "./../styles/main.scss";
 import Dispatcher from "./Dispatcher";
+import Header from "./partials/Header";
+import Footer from "./partials/Footer";
 
 
 export default class App extends Component {
@@ -11,7 +13,9 @@ export default class App extends Component {
   render() {
     return (
       <div>
+        <Header />
         <Dispatcher />
+        <Footer />
       </div>
     );
   }

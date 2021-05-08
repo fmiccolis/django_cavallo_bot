@@ -4,6 +4,6 @@ from frontend.views import *
 
 urlpatterns = [
     path('', index, name='index'),
-    path('join', index, name='join'),
+    path('photographer/<slug:slug>', index, name='join'),
     path('create', index, name='create')
 ]

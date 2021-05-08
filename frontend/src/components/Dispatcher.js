@@ -5,8 +5,7 @@ import {
   Route,
 } from "react-router-dom";
 import  "./../styles/main.scss";
-import RoomJoinPage from "./RoomJoinPage";
-import CreateRoomPage from "./CreateRoomPage";
+import PhotographerDetail from "./PhotographerDetail";
 import HomePage from "./HomePage";
 
 
@@ -20,8 +19,7 @@ export default class Dispatcher extends Component {
       <Router>
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route path="/join" component={RoomJoinPage} />
-          <Route path="/create" component={CreateRoomPage} />
+          <Route exact path="/photographer/:slug" component={PhotographerDetail} />
         </Switch>
       </Router>
     );

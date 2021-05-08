@@ -23,7 +23,8 @@ export default class HomePage extends Component {
     return (
       <ul>
         {this.state.list.map((value, index) => {
-          return <li id={value.id}>{value.name}</li>
+          let url = "/photographer/" + value.slug
+          return <a href={url} id={value.id}>{value.name}</a>
         })}
       </ul>
     );
