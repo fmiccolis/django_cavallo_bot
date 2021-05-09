@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 
-export default class PhotographerDetail extends Component {
+export default class EventDetail extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      photographer: "",
-      finished_fetch: false
-    }
+    this.state = {}
     this.slug = this.props.match.params.slug
     this.getPhotographer();
   }
@@ -16,18 +13,21 @@ export default class PhotographerDetail extends Component {
   }
 
   getPhotographer() {
-    fetch('/api/photographer/'+this.slug)
+    fetch('/api/event/'+this.slug)
       .then((response) => response.json())
       .then((data) => {
-        this.setState({
-          finished_fetch: true,
-          photographer: data
-        })
+        this.setState(data);
       });
   }
 
   render() {
     return (<div>
+        <div>
+            <p>{this.state.name}</p>
+            <p>{this.state.photographer}</p>
+            <p>{this.state.date}</p>
+            <p><a href={this.state.url} target="_blank">{this.state.url}</a></p>
+        </div>
         <div>
           <a href="/">Go back</a>
         </div>
