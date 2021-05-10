@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {Col, Container, Row} from "react-bootstrap";
 import PhotographerCard from "./partials/PhotographerCard"
+import SimpleAccordion from "./partials/SimpleAccordion";
 
 export default class HomePage extends Component {
   constructor(props) {
@@ -53,6 +54,7 @@ export default class HomePage extends Component {
             <Row className="mb-5">
               {items}
             </Row>
+            <SimpleAccordion />
           </Container>
         </div>)
   }
