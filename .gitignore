@@ -6,3 +6,5 @@ resources
 .idea
 **/__pycache__
 **/node_modules
+volt_react/**
+frontend2/**

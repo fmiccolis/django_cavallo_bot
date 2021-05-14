@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core.apps.CoreConfig',
     'frontend.apps.FrontendConfig',
+    'volt_react.apps.VoltReactConfig',
 
     'allauth',
     'allauth.account',
@@ -78,7 +79,7 @@ ROOT_URLCONF = 'django_cavallo_bot.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'templates', BASE_DIR / 'volt_react/public'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

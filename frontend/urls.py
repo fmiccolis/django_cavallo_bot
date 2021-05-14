@@ -1,9 +1,6 @@
 from django.urls import path
-from frontend.views import *
-
+from .views import index
 
 urlpatterns = [
-    path('', index, name='index'),
-    path('photographer/<slug:slug>', index, name='photographer'),
-    path('event/<slug:slug>', index, name='photographer'),
+    path('', index),
 ]

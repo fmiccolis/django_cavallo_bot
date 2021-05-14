@@ -1,22 +1,26 @@
-import React, {Component} from 'react';
-import  "./../styles/main.scss";
-import Dispatcher from "./Dispatcher";
-import Header from "./partials/Header";
-import Footer from "./partials/Footer";
+import React, { Component } from "react";
+import {render} from "react-dom";
 
-
-export default class App extends Component {
+class App extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      data: [],
+      loaded: false,
+      placeholder: "Loading"
+    };
   }
 
   render() {
     return (
       <div>
-        <Header />
-        <Dispatcher />
-        <Footer />
+        Ciao
       </div>
     );
   }
 }
+
+export default App;
+
+const container = document.getElementById("app");
+render(<App />, container);
