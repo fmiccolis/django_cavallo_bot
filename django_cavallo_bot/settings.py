@@ -29,8 +29,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core.apps.CoreConfig',
-    'frontend.apps.FrontendConfig',
-    'volt_react.apps.VoltReactConfig',
 
     'allauth',
     'allauth.account',

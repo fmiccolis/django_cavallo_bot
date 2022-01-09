@@ -1,0 +1,44 @@
+{
+  "normal": [
+    {
+      "command": "start",
+      "description": "inizia a parlare con il bot"
+    },
+    {
+      "command": "help",
+      "description": "ottieni la lista dei comandi"
+    },
+    {
+      "command": "cancel",
+      "description": "chiudi la conversazione corrente"
+    },
+    {
+      "command": "invia",
+      "description": "codifica i dati del tuo volto"
+    },
+    {
+      "command": "candidatura",
+      "description": "diventa un fotografo"
+    },
+    {
+      "command": "eventi",
+      "description": "mostra tutti gli eventi"
+    }
+  ],
+  "photographer": [
+    {
+      "command": "gestione _password_",
+      "description": "usa questo comando insieme alla TUA password per gestire i tuoi eventi"
+    }
+  ],
+  "dev": [
+    {
+      "command": "categorie",
+      "description": "visualizza le categorie"
+    },
+    {
+      "command": "fotografi",
+      "description": "visualizza i fotografi"
+    }
+  ]
+}

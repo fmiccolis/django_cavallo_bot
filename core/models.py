@@ -187,6 +187,7 @@ class Address(models.Model):
 
 
 class TelegramUser(models.Model):
+    id = models.BigIntegerField(primary_key=True)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -195,7 +196,9 @@ class TelegramUser(models.Model):
     )
     username = models.CharField(
         "Username",
-        max_length=50
+        max_length=50,
+        null=True,
+        blank=True
     )
     first_name = models.CharField(
         "Nome",
