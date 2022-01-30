@@ -258,18 +258,17 @@ def save(update: Update, context: CallbackContext):
             EVENT_ZIP_PATH.format(event.id)
         ])
 
-        context.user_data["evento"] = event
-
         if movezip:
             final_path = os.path.join(EVENT_ZIP_PATH.format(event.id), context.user_data['zip_name'])
             server_file.download(final_path)
             event.url = final_path
             event.save()
-            context.user_data["evento"] = event
             remaining_space = context.user_data['remaining_space']
             zip_size = context.user_data['zip_size']
             fotografo.disk_space = remaining_space - zip_size
             fotografo.save()
+
+        context.user_data["evento"] = event
 
         reply_keyboard = [['Si', 'No']]
         message.reply_text(

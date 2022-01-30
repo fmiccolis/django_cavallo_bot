@@ -405,6 +405,14 @@ class Event(models.Model):
                   "Questa regola sovrasta anche la regola pubblico/privato",
         default=True
     )
+    is_scanning = models.BooleanField(
+        "Scannerizzando",
+        help_text="Se vero significa che si stanno analizzando le foto.<br>"
+                  "Si stanno cercando i volti e generando gli encodings.",
+        default=False,
+        null=True,
+        blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 

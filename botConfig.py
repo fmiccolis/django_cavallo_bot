@@ -22,7 +22,7 @@ django.setup()
 
 from core.models import Event, Photo, Photographer, Category
 
-TOKEN = "1190304453:AAF4OOJ3xRe-EUkmyCaWikpJSqdLPSXkF9M"
+TOKEN = "1201570802:AAHYrNBbv6h_Oc4C0-H1ouACtpxuWi_bx0Q"
 
 EVENTS_PATH = 'resources/eventi'
 EVENT_ZIP_PATH = 'resources/eventi/{0}/zipped'

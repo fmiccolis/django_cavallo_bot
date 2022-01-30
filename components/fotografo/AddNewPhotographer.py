@@ -76,7 +76,7 @@ def addig(update: Update, context: CallbackContext):
         fotografo.save()
         message.reply_text('Ottimo! Ho salvato i tuoi dati, però ancora non puoi aggiungere i tuoi eventi. '
                            'Verrai contattato da uno degli amministratori che verificherà che tu non sia un '
-                           'robot (come me)!\nSe l\'esito sarà positivo allora usando il comando /gstione '
+                           'robot (come me)!\nSe l\'esito sarà positivo allora usando il comando /gestione '
                            'potrai accedere a tutte le funzionalità per aggiungere i tuoi fantastici eventi.')
     except Exception as E:
         gra_logger.error(extra=extra, msg=f"Errore {E}")

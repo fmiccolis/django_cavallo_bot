@@ -3,7 +3,7 @@ import json
 
 # specific telegram bot import
 
-from telegram import ParseMode, Update
+from telegram import ParseMode, Update, User
 from telegram.ext import Updater, CommandHandler, CallbackContext
 
 # custom user import
@@ -25,7 +25,7 @@ extra = {'file_name': 'bot.py'}
 
 
 def start(update: Update, context: CallbackContext):
-    user = update.effective_user
+    user: User = update.effective_user
     try:
         tg_user = TelegramUser.objects.get(pk=user.id)
         parameter = "Bentornato " + tg_user.first_name
@@ -34,7 +34,8 @@ def start(update: Update, context: CallbackContext):
         parameter = "Benvenuto " + user.first_name
         bot_logger.info(extra=extra, msg=f"{user.id} not saved")
         try:
-            tg_user = TelegramUser(**TelegramUser.generate_constructor(user=user.__dict__))
+            bot_logger.info(extra=extra, msg=user.to_dict())
+            tg_user = TelegramUser(**TelegramUser.generate_constructor(user=user.to_dict()))
             tg_user.save()
             bot_logger.info(extra=extra, msg=f"{tg_user.id} saved")
         except Exception as E:

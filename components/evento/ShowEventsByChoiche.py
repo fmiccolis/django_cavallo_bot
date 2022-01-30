@@ -25,7 +25,7 @@ def get_events(update: Update, context: CallbackContext):
 def get_by_category(message: Message, context: CallbackContext):
     eve_logger.info(extra=extra, msg=f"Request get_by_category")
     category: Category = context.user_data['categoria']
-    eventi = Event.objects.filter(category=category, is_public=True, status=True)
+    eventi = Event.objects.filter(category=category, is_public=True, status=True, is_scanning=False)
     if len(eventi) > 0:
         message.reply_text(
             f"In totale gli eventi pubblici con la categoria {category.name} "
@@ -43,7 +43,7 @@ def get_by_category(message: Message, context: CallbackContext):
 def get_by_grapher(message: Message, context: CallbackContext):
     eve_logger.info(extra=extra, msg=f"Request get_by_grapher")
     photographer: Photographer = context.user_data['fotografo']
-    eventi = Event.objects.filter(photographer=photographer, is_public=True, status=True)
+    eventi = Event.objects.filter(photographer=photographer, is_public=True, status=True, is_scanning=False)
     if eventi:
         message.reply_text(
             f"In totale gli eventi pubblici di {photographer.name} sono {len(eventi)}"

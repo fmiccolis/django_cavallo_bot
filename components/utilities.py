@@ -2,6 +2,7 @@ import mimetypes
 import os
 import pathlib
 import pickle
+import threading
 import urllib.request
 from datetime import datetime
 from zipfile import ZipFile
@@ -78,6 +79,14 @@ def start_scanning(update: Update, context: CallbackContext):
         internal = True
         real_img_list = extract_from_internal_url(url, evento.id)
 
+    evento.is_scanning = True
+    evento.save()
+    scanning_thread = threading.Thread(target=do_scan, args=(message_object, real_img_list, evento, internal, msg,))
+    scanning_thread.start()
+    return ConversationHandler.END
+
+
+def do_scan(message_object: Message, real_img_list: list, evento: Event, internal: bool, msg: Message):
     progress_msg = message_object.reply_text(f"Sto analizzando la foto 0 / {len(real_img_list)}.\n0.00 %")
     real_saved = 0
     start_time = datetime.now()
@@ -127,7 +136,6 @@ def start_scanning(update: Update, context: CallbackContext):
         os.remove(temp_photo)
 
     msg.edit_text(f"Ho salvato {real_saved} foto.")
-    return ConversationHandler.END
 
 
 def extract_from_external_url(url: str, message: Message) -> list:
