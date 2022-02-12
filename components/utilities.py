@@ -81,12 +81,12 @@ def start_scanning(update: Update, context: CallbackContext):
 
     evento.is_scanning = True
     evento.save()
-    scanning_thread = threading.Thread(target=do_scan, args=(message_object, real_img_list, evento, internal, msg,))
+    scanning_thread = threading.Thread(target=do_scan, args=(message_object, real_img_list, evento, internal))
     scanning_thread.start()
     return ConversationHandler.END
 
 
-def do_scan(message_object: Message, real_img_list: list, evento: Event, internal: bool, msg: Message):
+def do_scan(message_object: Message, real_img_list: list, evento: Event, internal: bool):
     progress_msg = message_object.reply_text(f"Sto analizzando la foto 0 / {len(real_img_list)}.\n0.00 %")
     real_saved = 0
     start_time = datetime.now()
@@ -135,7 +135,7 @@ def do_scan(message_object: Message, real_img_list: list, evento: Event, interna
     if os.path.exists(temp_photo):
         os.remove(temp_photo)
 
-    msg.edit_text(f"Ho salvato {real_saved} foto.")
+    progress_msg.reply_text(f"Ho salvato {real_saved} foto.")
 
 
 def extract_from_external_url(url: str, message: Message) -> list:
